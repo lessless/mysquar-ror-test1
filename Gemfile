@@ -11,8 +11,8 @@ gem 'turbolinks'
 gem 'jbuilder', '~> 2.0'
 gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'kaminari'
-
 gem 'pg'
+gem 'solid_use_case', '~> 2.1.1'
 
 group :development, :test do
   gem 'byebug'
