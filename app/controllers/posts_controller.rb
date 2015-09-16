@@ -1,6 +1,7 @@
 class PostsController < ApplicationController
   def recency
-    render json: {}
+    posts = Post.order(created_at: :desc)
+    render json: {records: posts}
   end
 
   def hot

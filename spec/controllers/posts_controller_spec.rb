@@ -26,10 +26,8 @@ RSpec.describe PostsController, type: :controller do
       end
 
       it "returns records in recency order" do
-        JSON::parse(response.body)['records'].tap do |records|
-          expected = [post_2, post_1, post_3].map { |e| e.as_json }
-          expect(records).to eq(expected)
-        end
+        expected = [post_2, post_1, post_3]
+        expect(response.body).to eq({ records: expected }.to_json)
       end
     end
 
