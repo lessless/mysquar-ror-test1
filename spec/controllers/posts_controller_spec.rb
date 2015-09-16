@@ -37,12 +37,14 @@ RSpec.describe PostsController, type: :controller do
       end
 
       it "returns pagination info" do
-        JSON::parse(response.body)['pagination'].tap do |pagination|
+        payload = JSON::parse(response.body)
+        payload['pagination'].tap do |pagination|
           expect(pagination).to eq({
-            'page' => 1,
-            'per_page' => 2,
-            'total_count' => 3
+            'page'        => '1',
+            'per_page'    => '2',
+            'total_count' => '3'
           })
+          expect(payload['records'].length).to eq(2)
         end
       end
     end
