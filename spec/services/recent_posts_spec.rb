@@ -13,7 +13,7 @@ RSpec.describe RecentPosts do
 
 
   it "runs successfully" do
-    result = RecentPosts.new(pagination_info).execute
+    result = described_class.new(pagination_info).execute
     expected = { records: recent_posts, pagination: pagination_info }
 
     expect(result).to eq(expected)

@@ -17,7 +17,8 @@ RSpec.describe PostsController, type: :controller do
 
       it "returns records in recency order" do
         expected = [post_2, post_1, post_3]
-        expect(response.body).to eq({ records: expected }.to_json)
+        payload = JSON::parse(response.body)
+        expect(payload['records'].to_json).to eq(expected.to_json)
       end
     end
 
@@ -28,38 +29,38 @@ RSpec.describe PostsController, type: :controller do
 
       it "returns pagination info" do
         payload = JSON::parse(response.body)
-        payload['pagination'].tap do |pagination|
-          expect(pagination).to eq(pagination_info)
-          expect(payload['records'].length).to eq(2)
-        end
+
+        expect(payload['pagination']).to eq(pagination_info)
+        expect(payload['records'].length).to eq(2)
       end
     end
   end
 
-  # describe "GET #hot" do
-  #   before(:each) do
-  #     10.times do |_|
-  #       create(:like, post_id: post_1.id, created_at: 90.minutes.ago)
-  #     end
+  describe "GET #hot" do
+    before(:each) do
+      10.times do |_|
+        create(:like, post_id: post_1.id, user: user, created_at: 59.minutes.ago)
+      end
 
-  #     5.times do |_|
-  #       create(:like, post_id: post_2.id, created_at: 10.minutes.ago)
-  #     end
+      5.times do |_|
+        create(:like, post_id: post_2.id, user: user, created_at: 10.minutes.ago)
+      end
 
-  #     6.times do |_|
-  #       create(:like, post_id: post_3.id, created_at: 150.minutes.ago)
-  #     end
+      6.times do |_|
+        create(:like, post_id: post_3.id, user: user, created_at: 150.minutes.ago)
+      end
 
-  #     get :hot, {page: 1, per_page: 3}
-  #   end
+      get :hot, {page: 1, per_page: 2}
+    end
 
-  #   it "returns records ordered by 'hot'" do
-  #     JSON::parse(response.body)['records'].tap do |records|
-  #       expected = [post_2, post_1].map { |e| e.as_json }
-  #       expect(records).to eq(expected)
-  #     end
-  #   end
-  # end
+    it "returns records ordered by 'hot'" do
+      expected = [post_2, post_1].map { |e| e.as_json }
+      payload = JSON::parse(response.body)
+
+      expect(payload['pagination']).to eq(pagination_info)
+      expect(payload['records'].to_json).to eq(expected.to_json)
+    end
+  end
 
   # describe "GET #trending" do
   #   before(:each) do

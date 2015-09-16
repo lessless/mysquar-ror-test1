@@ -5,7 +5,8 @@ class PostsController < ApplicationController
   end
 
   def hot
-    render nothing: true
+    payload = HotPosts.new(params).execute
+    render json: payload
   end
 
   def trending
